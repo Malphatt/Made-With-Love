@@ -1,0 +1,36 @@
+yellow (ok)
+stroke - dfd80f
+lower stroke - d1cb12
+glow - eaea28
+gradient - ecea2d
+
+green (good)
+stroke - 5fbb49
+lower stroke - 468a38
+glow - 6ac36a
+gradient - 89c481
+
+blue (nice)
+stroke - 5e9cdb
+lower stroke - 376b9f
+glow - 7aacde
+gradient - 75abe2
+
+orange (great)
+stroke - e9ab18
+lower stroke - ecc568
+glow - ecc568
+gradient - eebe4c
+
+purple (perfect)
+stroke - de21f5
+lower stroke - b01dc1
+glow - b01dc1
+gradient - e782f3
+
+4 90%
+5 80%
+6 65%
+7 50%
+8 25%
+9 0%

@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\GameObjects">
+      <UniqueIdentifier>{b97a3213-fc9b-4f0b-8dbb-985d57a66885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\GO_Attributes">
+      <UniqueIdentifier>{7aa9f98f-1d88-47fa-9a6c-686d2aabaf36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools">
+      <UniqueIdentifier>{da5b15db-13e9-44e8-976e-9ef4c8918ea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects">
+      <UniqueIdentifier>{c2a92746-679e-4153-84d8-5c307bdf7611}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\GO_Attributes">
+      <UniqueIdentifier>{5e20e904-289b-45f8-9eff-53624c8bb340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tools">
+      <UniqueIdentifier>{c3d0e580-7e53-4270-9c8e-d53b12e52fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Base_GO">
+      <UniqueIdentifier>{0e6b7bcc-b592-46f2-b929-c82408ec12f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\Base_GO">
+      <UniqueIdentifier>{8b3a6a3f-0759-4d5c-8b8c-19e215f56406}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools\Main Tools">
+      <UniqueIdentifier>{df160505-b196-4810-926c-b5c0db6fa73b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Tools\Misc Tools">
+      <UniqueIdentifier>{a5e9c2bd-4112-45b0-9308-f31ca3ac0e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tools\Main Tools">
+      <UniqueIdentifier>{642913bd-ff6c-406b-a3fd-9d07c9f23a3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tools\Misc Tools">
+      <UniqueIdentifier>{f68a4135-1fdb-4bdf-97c8-52af5fa9fc95}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DDR.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GO_Colour.cpp">
+      <Filter>Source Files\GameObjects\GO_Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Source Files\GameObjects\GO_Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Arrow.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ArrowType.cpp">
+      <Filter>Source Files\GameObjects\GO_Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedSprite.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GO_Rect.cpp">
+      <Filter>Source Files\GameObjects\Base_GO</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\GameObjects\Base_GO</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameWorld.cpp">
+      <Filter>Source Files\Tools\Main Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files\Tools\Main Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Spawner.cpp">
+      <Filter>Source Files\Tools\Main Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Source Files\Tools\Misc Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Source Files\Tools\Misc Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files\Tools\Misc Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Column.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerSprite.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GO_Colour.h">
+      <Filter>Header Files\GameObjects\GO_Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Header Files\GameObjects\GO_Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Arrow.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowType.h">
+      <Filter>Header Files\GameObjects\GO_Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedSprite.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\GameObjects\Base_GO</Filter>
+    </ClInclude>
+    <ClInclude Include="GO_Rect.h">
+      <Filter>Header Files\GameObjects\Base_GO</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWorld.h">
+      <Filter>Header Files\Tools\Main Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files\Tools\Main Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawner.h">
+      <Filter>Header Files\Tools\Main Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files\Tools\Misc Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Header Files\Tools\Misc Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files\Tools\Misc Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Column.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSprite.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
