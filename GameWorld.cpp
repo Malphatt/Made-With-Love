@@ -5,6 +5,7 @@
 
 GameWorld::GameWorld()
 {
+	// Initialize variables
 	gKeys = new bool[512];
 	window = new Window("Matthew Freeman - CGP2015 Game Programming - 26470281 - Made With Love", 100, 100, 1280, 720, 1920, 1080, gKeys);
 
@@ -32,20 +33,20 @@ void GameWorld::HandleEvents()
 		running = false;
 	}
 
+	// Initialize Object Spawner
 	if (ObjectSpawner->Init() == false)
 	{
 		printf("Failed to initialize!\n");
 		running = false;
 	}
 
+	// Main game loop
 	SDL_Event _gameWorld0Event;
 	while (running)
 	{
 		Clock->Update();
 
-		int x, y;
-		SDL_GetWindowPosition(window->GetWindow(), &x, &y);
-		//cout << "Window Position: " << x << ", " << y << endl;
+		// Input
 		if (SDL_PollEvent(&_gameWorld0Event))
 		{
 			if (_gameWorld0Event.type == SDL_QUIT) running = false;
@@ -60,9 +61,11 @@ void GameWorld::HandleEvents()
 			Input();
 		}
 
+		// Update
 		if (Clock->DeltaTicks >= static_cast<double>(1000) / tickRate)
 			async(&GameWorld::Update, this);
 
+		// Render
 		if (Clock->DeltaFrames >= static_cast<double>(1000) / window->FrameRate)
 			Render();
 	}
@@ -79,7 +82,9 @@ void GameWorld::Input()
 		// Pressed
 		if (W_Primed == true)
 		{
+			// Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckCollision(2, Clock->GetTicks()));
+			// Set player sprite state
 			Player->SetPlayerState(PlayerSprite::Up, Clock->GetTicks());
 			//if (Clock->GetTicks() < 3900) cout << "Ticks: " << Clock->GetTicks() - 132 << " | Type: 2" << endl; // Speed = 8
 			//else cout << "Ticks: " << Clock->GetTicks() - 88 << " | Type: 2" << endl; // Speed = 12
@@ -87,14 +92,13 @@ void GameWorld::Input()
 			W_R_Primed = true;
 		}
 		// Held
-		else
-		{
+		else // Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckHoldCollision(2, Clock->GetTicks()));
-		}
 	if (gKeys[SDLK_w] == false) // Released (Prime the key to check for next press)
 	{
 		if (W_R_Primed == true)
 		{
+			// Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckReleaseCollision(2, Clock->GetTicks()));
 			W_Primed = true;
 			W_R_Primed = false;
@@ -106,7 +110,9 @@ void GameWorld::Input()
 		// Pressed
 		if (A_Primed == true)
 		{
+			// Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckCollision(0, Clock->GetTicks()));
+			// Set player sprite state
 			Player->SetPlayerState(PlayerSprite::Left, Clock->GetTicks());
 			//if (Clock->GetTicks() < 3900) cout << "Ticks: " << Clock->GetTicks() - 132 << " | Type: 0" << endl; // Speed = 8
 			//else cout << "Ticks: " << Clock->GetTicks() - 88 << " | Type: 0" << endl; // Speed = 12
@@ -114,14 +120,13 @@ void GameWorld::Input()
 			A_R_Primed = true;
 		}
 		// Held
-		else
-		{
+		else // Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckHoldCollision(0, Clock->GetTicks()));
-		}
 	if (gKeys[SDLK_a] == false) // Released (Prime the key to check for next press)
 	{
 		if (A_R_Primed == true)
 		{
+			// Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckReleaseCollision(0, Clock->GetTicks()));
 			A_Primed = true;
 			A_R_Primed = false;
@@ -133,7 +138,9 @@ void GameWorld::Input()
 		// Pressed
 		if (S_Primed == true)
 		{
+			// Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckCollision(1, Clock->GetTicks()));
+			// Set player sprite state
 			Player->SetPlayerState(PlayerSprite::Down, Clock->GetTicks());
 			//if (Clock->GetTicks() < 3900) cout << "Ticks: " << Clock->GetTicks() - 132 << " | Type: 1" << endl; // Speed = 8
 			//else cout << "Ticks: " << Clock->GetTicks() - 88 << " | Type: 1" << endl; // Speed = 12
@@ -141,14 +148,13 @@ void GameWorld::Input()
 			S_R_Primed = true;
 		}
 		// Held
-		else
-		{
+		else // Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckHoldCollision(1, Clock->GetTicks()));
-		}
 	if (gKeys[SDLK_s] == false) // Released (Prime the key to check for next press)
 	{
 		if (S_R_Primed == true)
 		{
+			// Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckReleaseCollision(1, Clock->GetTicks()));
 			S_Primed = true;
 			S_R_Primed = false;
@@ -160,7 +166,9 @@ void GameWorld::Input()
 		// Pressed
 		if (D_Primed == true)
 		{
+			// Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckCollision(3, Clock->GetTicks()));
+			// Set player sprite state
 			Player->SetPlayerState(PlayerSprite::Right, Clock->GetTicks());
 			//if (Clock->GetTicks() < 3900) cout << "Ticks: " << Clock->GetTicks() - 132 << " | Type: 3" << endl; // Speed = 8
 			//else cout << "Ticks: " << Clock->GetTicks() - 88 << " | Type: 3" << endl; // Speed = 12
@@ -168,14 +176,13 @@ void GameWorld::Input()
 			D_R_Primed = true;
 		}
 		// Held
-		else
-		{
+		else // Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckHoldCollision(3, Clock->GetTicks()));
-		}
 	if (gKeys[SDLK_d] == false) // Released (Prime the key to check for next press)
 	{
 		if (D_R_Primed == true)
 		{
+			// Add score
 			PlayerScore->AddScore(ObjectSpawner->CheckReleaseCollision(3, Clock->GetTicks()));
 			D_Primed = true;
 			D_R_Primed = false;
@@ -190,6 +197,7 @@ void GameWorld::Update()
 	vector<GameObject*> newArrows = ObjectSpawner->GetNewArrows();
 	for (size_t i = 0; i < newArrows.size(); i++) window->AddGameObject(newArrows[i], 2);
 
+	// Update player
 	Player->Update(Clock->GetTicks(), PlayerScore->GetMultiplier());
 
 	// Update game objects
@@ -198,6 +206,7 @@ void GameWorld::Update()
 	{
 		for (size_t j = 0; j < gameObjects[i].size(); j++)
 		{
+			// Update game object
 			gameObjects[i][j]->Update();
 
 			// Check if Object needs to be destroyed (Memory Management)
@@ -213,15 +222,17 @@ void GameWorld::Update()
 
 	// Tick Clock
 	Clock->Tick();
-
+	// Reset Tick Count
 	Clock->ResetTickCount();
 }
 
 void GameWorld::Render()
 {
+	// Clear, Draw, and Render
 	window->Clear();
 	window->Draw();
 	window->Render();
 
+	// Reset Frame Count
 	Clock->ResetFrameCount();
 }

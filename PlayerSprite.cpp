@@ -11,22 +11,24 @@ PlayerSprite::~PlayerSprite()
 
 void PlayerSprite::Update(int Ticks, int combo)
 {
+	// Calculate the number of ticks since the last state change
 	this->ticksSinceStateChange = Ticks - this->StateChangeTicks;
 
+	// If the player has been in the same state for too long, set the player to idle
 	if (this->ticksSinceStateChange > this->maxTicksSinceStateChange) SetPlayerState(Idle, Ticks);
 
 	// Update the idle animation (even if the player is moving, this is so the idle animation syncs up with the music)
 	if (this->ticksSinceLastIdleFrame >= this->idleFrameRate)
 	{
+		// Reset the tick counter and increment the current idle frame
 		this->ticksSinceLastIdleFrame = 0;
 		this->currentIdleFrame++;
 		if (this->currentIdleFrame >= this->totalIdleFrames) this->currentIdleFrame = 0;
 	}
-	else
-	{
+	else // Increment the tick counter
 		this->ticksSinceLastIdleFrame++;
-	}
 
+	// Update the player sprite based on the current state
 	switch (this->State)
 	{
 	case Idle:
@@ -46,15 +48,16 @@ void PlayerSprite::Update(int Ticks, int combo)
 		break;
 	}
 
+	// Reset the state change flag so this function doesn't get called again until the state changes
 	this->StateChanged = false;
 }
 
 void PlayerSprite::SetPlayerState(enum State playerState, int Ticks)
 {
+	// Set the previous state to the current state
 	this->previousState = this->State;
-	this->StateChanged = true;
-	this->StateChangeTicks = Ticks;
 
+	// Set the new state if it is the same as the previous state, invert the state unless the state is idle
 	switch (playerState)
 	{
 	case Idle:
@@ -77,4 +80,8 @@ void PlayerSprite::SetPlayerState(enum State playerState, int Ticks)
 		else this->State = playerState;
 		break;
 	}
+
+	// Set the state change flag and the tick count for the state change
+	this->StateChanged = true;
+	this->StateChangeTicks = Ticks;
 }

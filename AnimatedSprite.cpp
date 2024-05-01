@@ -72,7 +72,7 @@ void AnimatedSprite::Init(SDL_Renderer* renderer)
 {
 	Sprite::Init(renderer);
 
-	// 
+	// Load all the frames of the animation
 	for (int i = 0; i < frameCount; i++)
 	{
 		string path = spritePathPrefix + to_string(i) + ".png";
@@ -84,19 +84,23 @@ void AnimatedSprite::Init(SDL_Renderer* renderer)
 
 void AnimatedSprite::ChangeSpritePath()
 {
+	// Change the sprite to the current frame
 	this->SpriteTexture = this->animationFrames[this->currentFrame];
 }
 
 void AnimatedSprite::Draw(SDL_Renderer* renderer)
 {
+	// Draw the current frame
 	Sprite::Draw(renderer);
 }
 
 void AnimatedSprite::StartAnimation(int Ticks)
 {
+	// Start the animation from the beginning
 	this->isAnimating = true;
 	this->startFrameTicks = Ticks;
 
+	// Log the start
 	if (*isLoggingEnabled)
 		SDL_Log("%s Started Animation (%p)", Logger::GetTimestamp().c_str(), this);
 }
@@ -108,39 +112,51 @@ void AnimatedSprite::PauseAnimation()
 
 void AnimatedSprite::ResumeAnimation(int Ticks)
 {
+	// Resume the animation from the current frame
 	this->isAnimating = true;
 	this->startFrameTicks = Ticks - this->totalAnimationTicks;
 }
 
 void AnimatedSprite::StopAnimation()
 {
+	// Stop the animation and reset the current frame
 	this->currentFrame = 0;
 	this->isAnimating = false;
 
+	// Log the stop
 	if (*isLoggingEnabled)
 		SDL_Log("%s Stopped Animation (%p)", Logger::GetTimestamp().c_str(), this);
 }
 
 void AnimatedSprite::UpdateAnimation(int Ticks)
 {
+	// Check if the animation is playing and the object is not destroyed
 	if (this->isAnimating && !this->Destroy)
 	{
+		// Calculate the total ticks the animation has been playing for
 		this->totalAnimationTicks = Ticks - this->startFrameTicks;
 
+		// Calculate the current frame
 		int newFrame = trunc(this->totalAnimationTicks / this->animationSpeed);
 
+		// Check if the frame has changed
 		if (newFrame != this->currentFrame)
 		{
+			// Check if the animation has reached the end
 			if (newFrame >= this->animationFrames.size())
 			{
+				// Check if the animation should loop
 				if (this->loop)
 				{
+					// Restart the animation
 					this->currentFrame = 1;
 					this->startFrameTicks = Ticks;
 					UpdateAnimation(Ticks);
 				}
+				// Stop the animation
 				else StopAnimation();
 			}
+			// Change the frame
 			else
 			{
 				this->currentFrame = newFrame;

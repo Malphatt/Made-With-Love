@@ -124,7 +124,7 @@ public:
 	bool fullScreen = false; // Whether the window is in full screen mode
 	GO_Colour backgroundColour = { 0, 0, 0, 255 }; // Background colour of the window
 
-	int FrameRate = 60; // Frame rate of the window
+	int FrameRate = 120; // Frame rate of the window
 	bool renderWindowContents = true; // Whether the window contents should be rendered
 	bool* IsLoggingEnabled = new bool(true); // Whether logging is enabled
 private:

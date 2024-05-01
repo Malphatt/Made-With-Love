@@ -361,7 +361,7 @@ bool Spawner::Init()
 	SpawnArrow(window->GetRenderer(), 3277, new ArrowType(2, 30)); // short note
 	SpawnArrow(window->GetRenderer(), 3300, new ArrowType(1)); // short note
 	SpawnArrow(window->GetRenderer(), 3321, new ArrowType(2)); // short note
-	SpawnArrow(window->GetRenderer(), 3347, new ArrowType(0, new ArrowType(2, 20), 68)); // short note
+	SpawnArrow(window->GetRenderer(), 3347, new ArrowType(0, new ArrowType(2, 20), 68)); // short note which changes to long note
 	SpawnArrow(window->GetRenderer(), 3369, new ArrowType(3)); // short note
 	SpawnArrow(window->GetRenderer(), 3394, new ArrowType(0)); // short note
 	//SpawnArrow(window->GetRenderer(), 3415, new ArrowType(2)); // short note
@@ -430,6 +430,7 @@ bool Spawner::Init()
 	SpawnBONUSArrow(window->GetRenderer(), 4906, new ArrowType(1, 30)); // long note
 	SpawnBONUSArrow(window->GetRenderer(), 4906, new ArrowType(2, 30)); // long note
 
+	// Return true if everything was initialised successfully
 	return true;
 }
 
@@ -440,11 +441,13 @@ void Spawner::Seek(int totalTicks)
 	// If the game is after 65 seconds, the song is the bonus version (Adjust the time)
 	if (Clock->GetTicks() >= 3900) seconds -= static_cast<double>(3960) / 60;
 
+	// Seek the music
 	Mix_SetMusicPosition(seconds);
 }
 
 void Spawner::CheckDesync(int totalTicks)
 {
+	// Get the song position and game position
 	double songPosition = Mix_GetMusicPosition(Song);
 	double gamePosition = (totalTicks / 60.0);
 
@@ -481,27 +484,33 @@ void Spawner::SwitchSong(int songNumber)
 	switch (songNumber)
 	{
 	case 0:
+		// Adjust the song position based on the different track multiplier
 		songPosition /= differentTrackMultiplier;
 
+		// Clear memory
 		Mix_FreeMusic(Song);
 
 		// If the song is before 65 seconds, play the normal version
 		if (Clock->GetTicks() < 3900) Song = Mix_LoadMUS("Assets/Music/Decimate_100.mp3");
 		else Song = Mix_LoadMUS("Assets/Music/DecimateBONUS_100.mp3");
 
+		// Seek the music
 		Mix_FadeOutMusic(500);
 		Mix_FadeInMusic(Song, 1, 500);
 		Mix_FadeInMusicPos(Song, 1, 500, songPosition);
 		break;
 	case 1:
+		// Adjust the song position based on the different track multiplier
 		songPosition *= differentTrackMultiplier;
 
+		// Clear memory
 		Mix_FreeMusic(Song);
 
 		// If the song is before 65 seconds, play the normal version
 		if (Clock->GetTicks() < 3900) Song = Mix_LoadMUS("Assets/Music/Decimate_105.mp3");
 		else Song = Mix_LoadMUS("Assets/Music/DecimateBONUS_105.mp3");
 
+		// Seek the music
 		Mix_FadeOutMusic(500);
 		Mix_FadeInMusic(Song, 1, 500);
 		Mix_FadeInMusicPos(Song, 1, 500, songPosition);
@@ -512,11 +521,13 @@ void Spawner::SwitchSong(int songNumber)
 
 bool Spawner::Update(int totalTicks)
 {
+	// Update the held for time for the last hit arrows from each direction
 	if (LastLeftArrow != nullptr) LastLeftArrow->UpdateHeldFor(totalTicks);
 	if (LastDownArrow != nullptr) LastDownArrow->UpdateHeldFor(totalTicks);
 	if (LastUpArrow != nullptr) LastUpArrow->UpdateHeldFor(totalTicks);
 	if (LastRightArrow != nullptr) LastRightArrow->UpdateHeldFor(totalTicks);
 
+	// Update the columns
 	if (Type2Columns[0] != nullptr) Type2Columns[0]->Update(totalTicks);
 	if (Type2Columns[1] != nullptr) Type2Columns[1]->Update(totalTicks);
 	if (Type2Columns[2] != nullptr) Type2Columns[2]->Update(totalTicks);
@@ -540,6 +551,7 @@ bool Spawner::Update(int totalTicks)
 	// Update Type 2 Arrows
 	for (int i = 0; i < Type2Arrows.size(); i++)
 	{
+		// Keep vectors up to date to ensure no index out of bounds exceptions
 		if (Type2Arrows[i]->Destroy)
 		{
 			Type2Arrows.erase(Type2Arrows.begin() + i);
@@ -617,7 +629,7 @@ bool Spawner::Update(int totalTicks)
 		ForegroundFade->colour->a -= 26;
 		break;
 
-	// 1 second
+		// Splash screen animations
 	case 60:
 		SplashImage->MovePosition(2, 0);
 		break;
@@ -819,40 +831,30 @@ bool Spawner::Update(int totalTicks)
 		ForegroundFade->colour->a = 0;
 		break;
 
-	// 5 seconds
+	// 5 seconds (Game Start)
 	case 300:
 		break;
 
-	case 360:
-		break;
-
-	case 600:
-		break;
-
-	// 65 seconds (1 minute 5 seconds) { Close The Game }
+	// 65 seconds (1 minute 5 seconds) { Close The Game, unless the player has scored 40,000 points or more }
 	case 3900:
 		// Stop the music
 		Mix_HaltMusic();
-		if (PlayerScore->GetScore() < 40000)
-		{
-			return false;
-		}
+		// Return false to close the game if the player has not scored at least 40,000 points
+		if (PlayerScore->GetScore() < 40000) return false;
 		break;
 
 	// BONUS (66 seconds) { Switch The Song }
 	case 3960:
-		// Play the music
+		// Play the bonus song
 		SwitchSong(songNumber);
 		Seek(totalTicks);
-
-		//cout << endl << "<< BONUS SONG >>" << endl << endl;
-
 		break;
 
 	// 86 seconds (1 minute 26 seconds) { Close The Game } [This allows the song to fade in and out while having an extra 15 seconds of "gameplay"]
 	case 5160:
 		// Stop the music
 		Mix_HaltMusic();
+		// Return false to close the game
 		return false;
 	}
 
@@ -861,28 +863,23 @@ bool Spawner::Update(int totalTicks)
 
 void Spawner::ShowMissText(int x, int Ticks)
 {
+	// Show the Miss Text (for if the arrow goes off screen)
 	if (x == LeftArrow->x)
-	{
 		MissText[0]->StartAnimation(Ticks);
-	}
 	else if (x == DownArrow->x)
-	{
 		MissText[1]->StartAnimation(Ticks);
-	}
 	else if (x == UpArrow->x)
-	{
 		MissText[2]->StartAnimation(Ticks);
-	}
 	else if (x == RightArrow->x)
-	{
 		MissText[3]->StartAnimation(Ticks);
-	}
 }
 
 vector<GameObject*> Spawner::GetNewArrows()
 {
+	// Get the new arrows, clear the vector and return the new arrows
 	vector<GameObject*> returnVector = newArrows;
 	newArrows.clear();
+
 	return returnVector;
 }
 
@@ -894,28 +891,32 @@ int Spawner::CheckCollision(int direction, int Ticks)
 	case 0:
 		targetGameObject = LeftArrow;
 
+		// Animate the left player arrow to show the player has pressed the key
 		LeftArrowAnim->StopAnimation();
 		LeftArrowAnim->StartAnimation(Ticks);
 		break;
 	case 1:
 		targetGameObject = DownArrow;
 
+		// Animate the down player arrow to show the player has pressed the key
 		DownArrowAnim->StopAnimation();
 		DownArrowAnim->StartAnimation(Ticks);
 		break;
 	case 2:
 		targetGameObject = UpArrow;
 
+		// Animate the up player arrow to show the player has pressed the key
 		UpArrowAnim->StopAnimation();
 		UpArrowAnim->StartAnimation(Ticks);
 		break;
 	case 3:
 		targetGameObject = RightArrow;
 
+		// Animate the right player arrow to show the player has pressed the key
 		RightArrowAnim->StopAnimation();
 		RightArrowAnim->StartAnimation(Ticks);
 		break;
-	default:
+	default: // This should never happen (Invalid Arrow Direction)
 		SDL_LogWarn(SPAWNER_LOG_CATEGORY_ERROR, "%s Invalid Arrow Direction Declared (Checking Collision)", Logger::GetTimestamp().c_str());
 		return -1;
 	}
@@ -965,6 +966,7 @@ int Spawner::CheckCollision(int direction, int Ticks)
 		}
 		else if (arrow->Type->Type == 1)
 		{
+			// Set the last arrow hit in the direction
 			switch (direction)
 			{
 			case 0:
@@ -983,6 +985,7 @@ int Spawner::CheckCollision(int direction, int Ticks)
 
 			// Freeze the arrow
 			arrow->Freeze(Ticks);
+			// Get the worth of the hit
 			worth += arrow->Unfreeze(Ticks);
 		}
 		else if (arrow->Type->Type == 2)
@@ -994,38 +997,33 @@ int Spawner::CheckCollision(int direction, int Ticks)
 				newArrow = new Arrow(window->IsLoggingEnabled, LeftArrow->x, arrow->y + (arrow->Type->GetDelay() * -arrow->velocity->y), new Vector2(arrow->velocity->x, arrow->velocity->y), arrow->Type->GetEndArrowType());
 				// Add the arrow into the LeftArrows vector in the correct position (sorted by y)
 				for (int i = 0; i < LeftArrows.size(); i++)
-				{
 					if (newArrow->y < LeftArrows[i]->y)
 					{
 						LeftArrows.insert(LeftArrows.begin() + i, newArrow);
 						break;
 					}
-				}
+				if (LeftArrows.size() == 0) LeftArrows.push_back(newArrow);
 				break;
 			case 1:
 				newArrow = new Arrow(window->IsLoggingEnabled, DownArrow->x, arrow->y + (arrow->Type->GetDelay() * -arrow->velocity->y), new Vector2(arrow->velocity->x, arrow->velocity->y), arrow->Type->GetEndArrowType());
 				// Add the arrow into the DownArrows vector in the correct position (sorted by y)
 				for (int i = 0; i < DownArrows.size(); i++)
-				{
 					if (newArrow->y < DownArrows[i]->y)
 					{
 						DownArrows.insert(DownArrows.begin() + i, newArrow);
 						break;
 					}
-				}
 				if (DownArrows.size() == 0) DownArrows.push_back(newArrow);
 				break;
 			case 2:
 				newArrow = new Arrow(window->IsLoggingEnabled, UpArrow->x, arrow->y + (arrow->Type->GetDelay() * -arrow->velocity->y), new Vector2(arrow->velocity->x, arrow->velocity->y), arrow->Type->GetEndArrowType());
 				// Add the arrow into the UpArrows vector in the correct position (sorted by y)
 				for (int i = 0; i < UpArrows.size(); i++)
-				{
 					if (newArrow->y < UpArrows[i]->y)
 					{
 						UpArrows.insert(UpArrows.begin() + i, newArrow);
 						break;
 					}
-				}
 				if (UpArrows.size() == 0) UpArrows.push_back(newArrow);
 				break;
 			case 3:
@@ -1042,7 +1040,9 @@ int Spawner::CheckCollision(int direction, int Ticks)
 				if (RightArrows.size() == 0) RightArrows.push_back(newArrow);
 				break;
 			}
+			// Init the new arrow
 			newArrow->Init(window);
+			// Add the new arrow to the newArrows vector
 			newArrows.push_back(newArrow);
 
 			// Remove the arrow from the game
@@ -1052,6 +1052,7 @@ int Spawner::CheckCollision(int direction, int Ticks)
 			arrow = nullptr;
 		}
 
+		// Calculate the worth of the hit with the accuracy of the hit
 		worth = worth * accuracy;
 
 		// Return the worth of the hit
@@ -1068,6 +1069,7 @@ int Spawner::CheckCollision(int direction, int Ticks)
 
 int Spawner::CheckHoldCollision(int direction, int Ticks)
 {
+	// Get the last arrow in the direction
 	Arrow* arrow = nullptr;
 	switch (direction)
 	{
@@ -1083,7 +1085,7 @@ int Spawner::CheckHoldCollision(int direction, int Ticks)
 	case 3:
 		arrow = LastRightArrow;
 		break;
-	default:
+	default: // This should never happen (Invalid Arrow Direction)
 		SDL_LogWarn(SPAWNER_LOG_CATEGORY_ERROR, "%s Invalid Arrow Direction Declared (Checking Held Collision)", Logger::GetTimestamp().c_str());
 		return -1;
 	}
@@ -1103,6 +1105,7 @@ int Spawner::CheckHoldCollision(int direction, int Ticks)
 
 int Spawner::CheckReleaseCollision(int direction, int Ticks)
 {
+	// Get the last arrow in the direction
 	Arrow* arrow = nullptr;
 	switch (direction)
 	{
@@ -1222,14 +1225,13 @@ void Spawner::RemoveArrow(GameObject* arrow)
 			RightArrows.erase(RightArrows.begin() + index);
 		else SDL_LogWarn(SPAWNER_LOG_CATEGORY_ERROR, "%s Arrow Not Found In Vector (Removing Arrow)", Logger::GetTimestamp().c_str());
 	}
-	else
-	{
+	else // This should never happen (Invalid Arrow Direction)
 		SDL_LogWarn(SPAWNER_LOG_CATEGORY_ERROR, "%s Invalid Arrow Direction Declared (Removing Arrow)", Logger::GetTimestamp().c_str());
-	}
 }
 
 void Spawner::SpawnArrow(SDL_Renderer* renderer, int Ticks, ArrowType* arrowType)
 {
+	// Create a new arrow based on the arrow type
 	Arrow* arrow = nullptr;
 	int arrowSpeed = 8;
 	switch (arrowType->Direction)
@@ -1254,17 +1256,21 @@ void Spawner::SpawnArrow(SDL_Renderer* renderer, int Ticks, ArrowType* arrowType
 		SDL_LogWarn(SPAWNER_LOG_CATEGORY_ERROR, "%s Invalid Arrow Direction Declared (Spawning Arrow)", Logger::GetTimestamp().c_str());
 		return;
 	}
+	// Init the arrow
 	arrow->Init(window);
+	// If the arrow is a type 2 arrow, add it to the Type2Arrows vector
 	if (arrow->Type->Type == 2)
 	{
 		Type2Arrows.push_back(arrow);
 		Type2ArrowDirections.push_back(arrowType->GetEndDirection());
 	}
+	// Add the arrow to the newArrows vector
 	newArrows.push_back(arrow);
 }
 
 void Spawner::SpawnBONUSArrow(SDL_Renderer* renderer, int Ticks, ArrowType* arrowType)
 {
+	// Create a new arrow based on the arrow type
 	Arrow* arrow = nullptr;
 	int arrowSpeed = 12;
 	switch (arrowType->Direction)
@@ -1289,74 +1295,102 @@ void Spawner::SpawnBONUSArrow(SDL_Renderer* renderer, int Ticks, ArrowType* arro
 		SDL_LogWarn(SPAWNER_LOG_CATEGORY_ERROR, "%s Invalid Arrow Direction Declared (Spawning Arrow)", Logger::GetTimestamp().c_str());
 		return;
 	}
+	// Init the arrow
 	arrow->Init(window);
+	// If the arrow is a type 2 arrow, add it to the Type2Arrows vector
 	if (arrow->Type->Type == 2)
 	{
 		Type2Arrows.push_back(arrow);
 		Type2ArrowDirections.push_back(arrowType->GetEndDirection());
 	}
+	// Add the arrow to the newArrows vector
 	newArrows.push_back(arrow);
 }
 
 Arrow* Spawner::GetCollision(int direction, int Ticks)
 {
+	// Get the first arrow in the direction
 	switch (direction)
 	{
 	case 0:
+		// Check if there are any arrows in the vector
 		if (LeftArrows.size() == 0) return nullptr;
 
+		// Calculate the hit accuracy of the arrow based off the collision percentage with the player arrow
 		LeftArrows[0]->HitAccuracy = trunc(10 - (abs(LeftArrows[0]->y - LeftArrow->y) / static_cast<double>(10))) / 10;
+		// Ensure the hit accuracy is not negative
 		if (LeftArrows[0]->HitAccuracy < 0) LeftArrows[0]->HitAccuracy = 0;
 
+		// Check if the hit accuracy is greater than 0 (hit)
 		if (LeftArrows[0]->HitAccuracy > 0)
 		{
+			// Set the arrow to have been hit
 			Arrow* arrow = LeftArrows[0];
 			arrow->Hit();
 			LeftArrows.erase(LeftArrows.begin());
 			return arrow;
 		}
+		// Return nullptr if the hit accuracy is 0 (miss)
 		else return nullptr;
 	case 1:
+		// Check if there are any arrows in the vector
 		if (DownArrows.size() == 0) return nullptr;
 
+		// Calculate the hit accuracy of the arrow based off the collision percentage with the player arrow
 		DownArrows[0]->HitAccuracy = trunc(10 - (abs(DownArrows[0]->y - DownArrow->y) / static_cast<double>(10))) / 10;
+		// Ensure the hit accuracy is not negative
 		if (DownArrows[0]->HitAccuracy < 0) DownArrows[0]->HitAccuracy = 0;
 
+		// Check if the hit accuracy is greater than 0 (hit)
 		if (DownArrows[0]->HitAccuracy > 0)
 		{
+			// Set the arrow to have been hit
 			Arrow* arrow = DownArrows[0];
 			arrow->Hit();
 			DownArrows.erase(DownArrows.begin());
 			return arrow;
 		}
+		// Return nullptr if the hit accuracy is 0 (miss)
 		else return nullptr;
 	case 2:
+		// Check if there are any arrows in the vector
 		if (UpArrows.size() == 0) return nullptr;
 
+		// Calculate the hit accuracy of the arrow based off the collision percentage with the player arrow
 		UpArrows[0]->HitAccuracy = trunc(10 - (abs(UpArrows[0]->y - UpArrow->y) / static_cast<double>(10))) / 10;
+		// Ensure the hit accuracy is not negative
 		if (UpArrows[0]->HitAccuracy < 0) UpArrows[0]->HitAccuracy = 0;
 
+		// Check if the hit accuracy is greater than 0 (hit)
 		if (UpArrows[0]->HitAccuracy > 0)
 		{
+			// Set the arrow to have been hit
 			Arrow* arrow = UpArrows[0];
 			arrow->Hit();
 			UpArrows.erase(UpArrows.begin());
 			return arrow;
 		}
+		// Return nullptr if the hit accuracy is 0 (miss)
 		else return nullptr;
 	case 3:
+		// Check if there are any arrows in the vector
 		if (RightArrows.size() == 0) return nullptr;
 
+		// Calculate the hit accuracy of the arrow based off the collision percentage with the player arrow
 		RightArrows[0]->HitAccuracy = trunc(10 - (abs(RightArrows[0]->y - RightArrow->y) / static_cast<double>(10))) / 10;
+		// Ensure the hit accuracy is not negative
 		if (RightArrows[0]->HitAccuracy < 0) RightArrows[0]->HitAccuracy = 0;
 
+		// Check if the hit accuracy is greater than 0 (hit)
 		if (RightArrows[0]->HitAccuracy > 0)
 		{
+			// Set the arrow to have been hit
 			Arrow* arrow = RightArrows[0];
 			arrow->Hit();
 			RightArrows.erase(RightArrows.begin());
 			return arrow;
 		}
+		// Return nullptr if the hit accuracy is 0 (miss)
 		else return nullptr;
 	default:
 		SDL_LogWarn(SPAWNER_LOG_CATEGORY_ERROR, "%s Invalid Arrow Direction Declared (Getting Collision)", Logger::GetTimestamp().c_str());

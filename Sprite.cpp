@@ -40,6 +40,7 @@ Sprite::Sprite(bool* isLoggingEnabled, string gameObjectType, int x, int y, int 
 
 void Sprite::Init(SDL_Renderer* renderer)
 {
+	// Load the sprite
 	SDL_Surface* SpriteSurface = IMG_Load(this->spritePath.c_str());
 	this->SpriteTexture = SDL_CreateTextureFromSurface(renderer, SpriteSurface);
 	SDL_FreeSurface(SpriteSurface);
@@ -49,8 +50,10 @@ void Sprite::Init(SDL_Renderer* renderer)
 
 void Sprite::ChangeSpritePath(string spritePath)
 {
+	// Set the new sprite path
 	this->spritePath = spritePath;
 
+	// Load the sprite
 	SDL_Surface* SpriteSurface = IMG_Load(this->spritePath.c_str());
 	this->SpriteTexture = SDL_CreateTextureFromSurface(this->renderer, SpriteSurface);
 	SDL_FreeSurface(SpriteSurface);
@@ -58,5 +61,6 @@ void Sprite::ChangeSpritePath(string spritePath)
 
 void Sprite::Draw(SDL_Renderer* renderer)
 {
+	// Draw the sprite
 	SDL_RenderCopy(renderer, this->SpriteTexture, NULL, &rect);
 }

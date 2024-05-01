@@ -118,6 +118,7 @@ GameObject::GameObject(bool* isLoggingEnabled, string GameObjectType, int x, int
 	this->GameObjectType = GameObjectType;
 	this->isLoggingEnabled = isLoggingEnabled;
 
+	// Log the creation of the object
 	Log(0);
 }
 
@@ -126,13 +127,16 @@ GameObject::~GameObject()
 	delete colour;
 	delete velocity;
 
+	// Log the destruction of the object
 	Log(1);
 }
 
 void GameObject::Log(int logType)
 {
+	// If logging is disabled, return
 	if (!*isLoggingEnabled) return;
 
+	// Log the creation or destruction of the object
 	switch (logType)
 	{
 	case 0:
@@ -146,34 +150,41 @@ void GameObject::Log(int logType)
 
 void GameObject::MovePosition(int x_dir, int y_dir)
 {
+	// Move the object by the specified amount
 	this->x += x_dir;
 	this->y += y_dir;
 }
 
 void GameObject::SetConstructs(int new_x, int new_y)
 {
+	// Set the object's position to the specified coordinates
 	this->x = new_x;
 	this->y = new_y;
 }
 
 void GameObject::SetRenderLayer(size_t renderLayer)
 {
+	// Set the object's render layer
 	this->renderLayer = renderLayer;
 }
 
 void GameObject::SetDrawIndex(size_t drawIndex)
 {
+	// Set the object's draw index
 	this->drawIndex = drawIndex;
 }
 
 void GameObject::Update()
 {
+	// Update the object's position
 	MovePosition(velocity->x, velocity->y);
 
+	// If the object is off the top of the screen, destroy it
 	if (y < 0) DestroyObject();
 }
 
 void GameObject::DestroyObject()
 {
+	// Set the object's destroy flag to true
 	Destroy = true;
 }

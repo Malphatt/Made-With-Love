@@ -55,7 +55,7 @@ void Arrow::Init(Window* window)
 			{ "Assets/Sprites/Tails/TailRight/TailRight2.png", "Assets/Sprites/Tails/TailRight/TailRight1.png", "Assets/Sprites/Tails/TailRight/TailRight0.png" }
 		};
 
-		// Set the tail sprites
+		// Spawn the tail
 		int tailLength = (Type->GetHoldDuration() * -velocity->y) + (rect.h / 2);
 		for (int i = (rect.h / 2); i < tailLength; i += 5)
 		{
@@ -77,8 +77,11 @@ void Arrow::Init(Window* window)
 				tailSection = new Sprite(isLoggingEnabled, rect.x, rect.y + i, rect.w, 5, new Vector2(0, startingVelocity->y), tailSprites[Type->Direction][2]);
 			}
 
+			// Init the tail section
 			tailSection->Init(window->GetRenderer());
+			// Add the tail section to the tail
 			tail.push_back(tailSection);
+			// Add the tail section to the window
 			window->AddGameObject(tailSection, 1);
 		}
 	}
@@ -90,6 +93,7 @@ void Arrow::ChangeSpritePath(string spritePath)
 {
 	this->spritePath = spritePath;
 
+	// Load the new sprite
 	SDL_Surface* SpriteSurface = IMG_Load(this->spritePath.c_str());
 	this->SpriteTexture = SDL_CreateTextureFromSurface(this->window->GetRenderer(), SpriteSurface);
 	SDL_FreeSurface(SpriteSurface);
@@ -154,34 +158,43 @@ void Arrow::Hit()
 
 void Arrow::Freeze(int Ticks)
 {
+	// Set the velocity to 0 and set the start hold ticks
 	this->velocity->y = 0;
 	this->StartHoldTicks = Ticks;
 }
 
 double Arrow::Unfreeze(int Ticks)
 {
+	// Set the velocity to the starting velocity and update the held for
 	this->velocity->y = startingVelocity->y;
 	UpdateHeldFor(Ticks);
 
+	// Return the accuracy as a multiple of 0.1
 	return trunc(static_cast<double>(this->HeldFor) / this->Type->GetHoldDuration() * 10) / 10;
 }
 
 void Arrow::UpdateHeldFor(int Ticks)
 {
+	// Update the held for
 	this->HeldFor = Ticks - this->StartHoldTicks;
 	if (this->HeldFor > this->Type->GetHoldDuration())
 		this->HeldFor = this->Type->GetHoldDuration();
 
+	// Update the tail if the arrow is a type 1 arrow
 	if (this->Type->Type == 1) UpdateTail(Ticks);
 }
 
 void Arrow::UpdateTail(int Ticks)
 {
+	// Calculate the tail length
 	int tailLength = (Type->GetHoldDuration() * -velocity->y) + (rect.h / 2);
 
+	// Update the tail
 	for (int i = 0; i < tail.size(); i++)
 	{
+		// If the tail section is destroyed, skip it
 		if (tail[i]->Destroy) continue;
+		// If the tail section section is above the arrow, destroy it
 		if (tail[i]->y < rect.y + (rect.h / 2))
 		{
 			tail[i]->DestroyObject();
@@ -192,5 +205,6 @@ void Arrow::UpdateTail(int Ticks)
 
 void Arrow::Draw(SDL_Renderer* renderer)
 {
+	// Draw the tail
 	SDL_RenderCopy(renderer, this->SpriteTexture, NULL, &rect);
 }

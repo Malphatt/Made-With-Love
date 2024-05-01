@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[])
 {
-	//Try to initialise.. if we can't, then exit this program:
+	//Try to initialise SDL:
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return 1;
 
