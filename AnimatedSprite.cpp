@@ -72,6 +72,7 @@ void AnimatedSprite::Init(SDL_Renderer* renderer)
 {
 	Sprite::Init(renderer);
 
+	// 
 	for (int i = 0; i < frameCount; i++)
 	{
 		string path = spritePathPrefix + to_string(i) + ".png";
