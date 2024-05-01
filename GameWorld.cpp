@@ -213,7 +213,11 @@ void GameWorld::Update()
 			if (gameObjects[i][j]->Destroy)
 			{
 				GameObject* ObjectToDelete = window->RemoveGameObject(gameObjects[i][j]->GetRenderLayer(), gameObjects[i][j]->GetDrawIndex());
-				if (ObjectToDelete->y + ObjectToDelete->height < 0) ObjectSpawner->ShowMissText(ObjectToDelete->x, Clock->GetTicks());
+				if (ObjectToDelete->y + ObjectToDelete->height < 0)
+				{
+					ObjectSpawner->ShowMissText(ObjectToDelete->x, Clock->GetTicks()); // Show Miss Text
+					PlayerScore->AddScore(0); // Declare Miss (To reset multiplier)
+				}
 				ObjectSpawner->RemoveArrow(ObjectToDelete);
 				delete ObjectToDelete;
 			}

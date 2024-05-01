@@ -2,6 +2,15 @@
 
 Column::Column(bool* isLoggingEnabled, int x, int y, int width, int height, GO_Colour* colour) : GO_Rect(isLoggingEnabled, "Column", x, y, width, height, colour)
 {
+	this->ShowColumn = false;
+	this->currentTicks = 0;
+	this->startTicks = 0;
+	this->ticksElapsed = 0;
+	this->ticksSinceLastFrame = 0;
+	this->animationSpeed = 1;
+	this->maxAlpha = 50;
+	this->minAlpha = 0;
+	this->alphaIncrement = 1;
 }
 
 Column::~Column()

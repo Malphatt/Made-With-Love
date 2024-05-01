@@ -440,6 +440,8 @@ void Spawner::Seek(int totalTicks)
 
 	// If the game is after 65 seconds, the song is the bonus version (Adjust the time)
 	if (Clock->GetTicks() >= 3900) seconds -= static_cast<double>(3960) / 60;
+	// If the song is desynced, adjust the time
+	if (this->songNumber == 1) seconds *= differentTrackMultiplier;
 
 	// Seek the music
 	Mix_SetMusicPosition(seconds);
@@ -564,7 +566,6 @@ bool Spawner::Update(int totalTicks)
 		// Check if the arrow is on screen
 		if (window->GameObjectIsOnTopPercentScreen(Type2Arrows[i]->GetRenderLayer(), Type2Arrows[i]->GetDrawIndex(), 0.8))
 			Type2Columns[Type2Arrows[i]->Type->GetEndDirection()]->Show(totalTicks);
-		else Type2Columns[Type2Arrows[i]->Type->GetEndDirection()]->Hide(totalTicks);
 	}
 
 	if (totalTicks % 60 == 0) CheckDesync(totalTicks);

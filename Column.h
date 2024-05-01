@@ -40,20 +40,20 @@ public:
 	/// </summary>
 	/// <param name="Ticks"></param>
 	void Hide(int Ticks);
-
-	bool ShowColumn = false; // Whether the column is currently being shown
 private:
-	int currentTicks = 0; // The current number of ticks
+	bool ShowColumn; // Whether the column is currently being shown
 
-	int startTicks = 0; // The number of ticks when the animation started
-	int ticksElapsed = 0; // The number of ticks since the animation started
-	int ticksSinceLastFrame = 0; // The number of ticks since the last frame
+	int currentTicks; // The current number of ticks
 
-	int animationSpeed = 1; // The speed of the animation
+	int startTicks; // The number of ticks when the animation started
+	int ticksElapsed; // The number of ticks since the animation started
+	int ticksSinceLastFrame; // The number of ticks since the last frame
 
-	int maxAlpha = 50; // The maximum alpha value
-	int minAlpha = 0; // The minimum alpha value
-	int alphaIncrement = 1; // The increment of the alpha value
+	int animationSpeed; // The speed of the animation
+
+	int maxAlpha; // The maximum alpha value
+	int minAlpha; // The minimum alpha value
+	int alphaIncrement; // The increment of the alpha value
 };
 
 #endif // !Column_h
