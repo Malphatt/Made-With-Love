@@ -1,4 +1,5 @@
 #include "Logger.h"
+#include <WTypesbase.h>
 
 string Logger::GetTimestamp()
 {
@@ -9,9 +10,9 @@ string Logger::GetTimestamp()
 	// Get the current time as local time
 	localtime_s(&newtime, &now);
 
-	// Construct the timestamp string in the format [YYYY-MM-DD][HH:MM:SS]
+	// Construct the timestamp string in the format [YYYY-MM-DD][HH:MM:SS:mmm]
 	stringstream ss;
-	ss << "[" << getYear(newtime, now) << "-" << getMonth(newtime, now) << "-" << getDay(newtime, now) << "][" << getHour(newtime, now) << ":" << getMinute(newtime, now) << ":" << getSecond(newtime, now) << "]";
+	ss << "[" << getYear(newtime, now) << "-" << getMonth(newtime, now) << "-" << getDay(newtime, now) << "][" << getHour(newtime, now) << ":" << getMinute(newtime, now) << ":" << getSecond(newtime, now) << ":" << getMilliseconds() << "]";
 
 	return ss.str();
 }
@@ -61,4 +62,15 @@ string Logger::getSecond(tm newtime, time_t now)
 	string second = to_string(newtime.tm_sec);
 	if (newtime.tm_sec < 10) return "0" + second;
 	else return second;
+}
+
+string Logger::getMilliseconds()
+{
+	// Get the current millisecond
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	string millisecond = to_string(st.wMilliseconds);
+	if (st.wMilliseconds < 10) return "00" + millisecond;
+	else if (st.wMilliseconds < 100) return "0" + millisecond;
+	else return millisecond;
 }

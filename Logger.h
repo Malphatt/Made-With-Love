@@ -1,11 +1,8 @@
 #include <iostream>
-#include <chrono>
 #include <sstream>
-#include <iomanip>
 #include <string>
 
 using namespace std;
-using namespace chrono;
 
 #ifndef Logger_h
 #define Logger_h
@@ -61,6 +58,13 @@ private:
 	/// <param name="now"></param>
 	/// <returns>string</returns>
 	static string getSecond(tm newtime, time_t now);
+	/// <summary>
+	/// Returns the current millisecond
+	/// </summary>
+	/// <param name="newtime"></param>
+	/// <param name="now"></param>
+	/// <returns>string</returns>
+	static string getMilliseconds();
 };
 
 #endif // !Logger_h
